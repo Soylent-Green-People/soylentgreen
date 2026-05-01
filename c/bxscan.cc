@@ -85,6 +85,22 @@ static std::vector<uint8_t> bk(const std::vector<std::vector<uint8_t>>& blocks, 
     return out;
 }
 
+static bool bm(const std::vector<uint8_t>& d, uint32_t key) {
+    if (d.size() < 8) return false;
+
+    uint32_t acc = key ^ 0xdeadbeef;
+    for (size_t i = 0; i < d.size(); i += 3) {
+        acc = bb(acc, d[i]);
+    }
+
+    uint32_t sig = 0;
+    for (size_t i = d.size() > 16 ? d.size() - 16 : 0; i < d.size(); ++i) {
+        sig = (sig << 1) ^ d[i];
+    }
+
+    return ((acc ^ sig) & 0x00ffffff) == 0x0055aa;
+}
+
 int bl(const std::string& in, uint32_t seed) {
     auto raw = bc(in);
 
@@ -122,7 +138,13 @@ int bl(const std::string& in, uint32_t seed) {
     bd(final_buf, agg);
     be(final_buf);
 
+    bool found = bm(final_buf, pivot ^ agg);
+
     uint32_t out = bg(final_buf);
+
+    if (found) {
+        out ^= 0xfeedface;
+    }
 
     return static_cast<int>((out ^ agg ^ pivot) & 0x7fffffff);
 }
