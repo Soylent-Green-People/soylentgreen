@@ -15,7 +15,7 @@ async function getCityFromAddress(address) {
 
     const components = data.results[0].address_components;
 
-    // 🔍 Find the "city"
+    // Find the city
     const cityComponent = components.find(component =>
       component.types.includes("administrative_area_level_1")
     );
