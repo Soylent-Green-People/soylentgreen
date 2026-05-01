@@ -1,0 +1,12 @@
+POST /ingest  
+  Accepts array of objects with "id" and "text"
+
+POST /search  
+  Accepts:
+    {
+      "query": "...",
+      "k": number
+    }
+
+GET /health  
+  Returns basic status. It is kept like this for now.
