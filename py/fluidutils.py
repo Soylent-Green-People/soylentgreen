@@ -1,4 +1,3 @@
-# fluid_utils.py
 import numpy as np
 
 def simulate_mixing(grid_size=50, steps=100, diffusion=0.1, dt=0.1):
